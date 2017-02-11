@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": ["node_modules","_seed"],
+  "types": ["core-js"]
+}
