@@ -21,6 +21,7 @@
     "webpack": "^1.14.0"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack -w"
   }
 }

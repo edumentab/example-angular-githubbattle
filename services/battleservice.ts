@@ -5,35 +5,22 @@ import { GithubService } from './githubservice';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkjoin';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class BattleService {
+  cache = {}
   constructor(private githubService: GithubService){}
   battleInfoForUser(id){
-    let user$ = this.githubService.getUser(id);
-    let repo$ = this.githubService.getRepoListPages(id);
-    return Observable.forkJoin(user$, repo$).map( ([user,list]) => {
-      return ({user,list});
-    })
-  }
-  battleBetween(id1,id2){
-    return Observable.forkJoin(
-      this.battleInfoForUser(id1),
-      this.battleInfoForUser(id2)
-    ).map(([plr1,plr2]) => {
-      return {
-        player1: {
-          name: id1,
-          user: plr1.user,
-          repos: this.digestRepoList(plr1.list)
-        },
-        player2: {
-          name: id2,
-          user: plr2.user,
-          repos: this.digestRepoList(plr2.list)
-        }
-      };
-    })
+    if (!this.cache[id]){
+      let user$ = this.githubService.getUser(id);
+      let repo$ = this.githubService.getRepoListPages(id);
+      return Observable.forkJoin(user$, repo$).map( ([user,list]) => {
+        return ( this.cache[id] = ({id,user,repos:this.digestRepoList(list)}) );
+      })
+    } else {
+      return Observable.of(this.cache[id]);
+    }
   }
   digestRepoList(list){
     return list.reduce((mem, repo) => {

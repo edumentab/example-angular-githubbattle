@@ -27,15 +27,6 @@ export class AuthService {
   getAuthState(){
     return {token,user};
   }
-  signInWithPopupFAKE(){
-    setTimeout(()=>{
-      token = "SOMETOKEN";
-      user = {
-        name: "someUser"
-      };
-      listeners.forEach(cb=> cb(this.getAuthState()));
-    },300)
-  }
   signInWithPopup(){
     firebase.auth().signInWithPopup(provider).then(function(result) {
       token = result.credential.accessToken;

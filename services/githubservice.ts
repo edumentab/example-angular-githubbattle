@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/mergeMap'; // gives us flatMap
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/filter';
@@ -16,7 +16,7 @@ import { UrlService } from './urlservice';
 @Injectable()
 export class GithubService {
   constructor(private http: Http, private urls: UrlService){}
-  getUser(id):Observable<any>{ 
+  getUser(id):Observable<any>{
     return this.http.get(this.urls.urlToUser(id))
       .map( (res:Response)=> res.json() || {} );
   }

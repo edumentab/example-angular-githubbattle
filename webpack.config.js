@@ -1,7 +1,7 @@
 module.exports = {
   entry: './main.ts',
   output: {
-    path: './',
+    path: './dist',
     filename: 'bundle.js',
     sourceMapFilename: 'source.map'
   },
