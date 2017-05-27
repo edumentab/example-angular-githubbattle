@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 import { GithubService } from './githubservice';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkjoin';
+import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 
