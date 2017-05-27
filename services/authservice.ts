@@ -43,8 +43,9 @@ export class AuthService {
     firebase.auth().signInWithPopup(provider).then(result => {
       this.token = result.credential.accessToken;
       this.user = result.user;
+      delete this.error;
+      this.notifyListeners();
     }).catch(error => {
-      console.log("Authentication error", error);
       this.error = error;
       this.notifyListeners();
     });
