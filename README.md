@@ -1,0 +1,1 @@
+Read more about the app in [this post](posts/github-battle-an-angular-case-study-using-firebase-authentication/), and try it live [here](http://githubbattle.netlify.com/).
