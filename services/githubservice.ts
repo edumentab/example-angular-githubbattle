@@ -1,3 +1,12 @@
+/*
+A service for making requests to Github's API.
+Used in the BattleService.
+Uses the UrlService to create the exact URL:s.
+
+The functionality to get the list of repos for a specific user is somewhat complex
+since the list from Github is paginated, hence the extra stream juggling.
+*/
+
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
@@ -20,16 +29,16 @@ export class GithubService {
     return this.http.get(this.urls.urlToUser(id))
       .map( (res:Response)=> res.json() || {} );
   }
-  getRepoListSinglePage(id,page=1):Observable<any>{
-    return this.http.get(this.urls.urlToUserRepoListPage(id,page))
+  private getRepoListSinglePage(id,page=1):Observable<any>{
+    return this.http.get(this.urls.urlToUserRepoListPage(id, page))
       .map( (res:Response)=> ({
         repos: res.json(),
         pageNumber: page,
         isLast: !(res.headers.get("link") || '').split(',')[0].match(/rel=["']next["']/)
       }) );
   }
-  getRepoListPageStream(id,page=1){
-    return this.getRepoListSinglePage(id,page)
+  private getRepoListPageStream(id,page=1){
+    return this.getRepoListSinglePage(id, page)
       .flatMap((page)=>{
         let ret = Observable.of(page);
         if(!page.isLast){
@@ -40,11 +49,8 @@ export class GithubService {
   }
   getRepoListPages(id){
     let page$ = this.getRepoListPageStream(id);
-    let all$ = page$.map(val=>val.repos).scan((acc,val)=> (acc||[]).concat(val));
+    let all$ = page$.map(val=>val.repos).scan((acc, val)=> (acc||[]).concat(val));
     let last$ = page$.filter(val => val.isLast);
     return all$.sample(last$);
   }
 }
-
-
-

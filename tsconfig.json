@@ -3,8 +3,12 @@
     "target": "es5",
     "sourceMap": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "es5",
+      "es2015",
+      "dom"
+    ]
   },
-  "exclude": ["node_modules","_seed"],
-  "types": ["core-js"]
+  "exclude": ["node_modules"]
 }

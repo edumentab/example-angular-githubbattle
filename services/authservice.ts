@@ -1,3 +1,12 @@
+/*
+A service for handling authentication.
+Used in UrlService and in the App component.
+
+Uses the firebase authentication API for a clean interface with Github auth.
+This is just to save us from having do low-level auth stuff, we're not
+using any other part of Firebase.
+*/
+
 import { Injectable } from '@angular/core';
 
 import * as firebase from 'firebase/app';
@@ -11,28 +20,33 @@ firebase.initializeApp({
 
 const provider = new firebase.auth.GithubAuthProvider();
 
-let token, user, listeners = [];
-
 @Injectable()
 export class AuthService {
+  private listeners = [];
+  private token;
+  private user;
+  private error;
   constructor(){
-    firebase.auth().onAuthStateChanged(()=>{
-      listeners.forEach(cb=> cb(this.getAuthState()));
-    });
+    firebase.auth().onAuthStateChanged(()=>this.notifyListeners());
+  }
+  notifyListeners(){
+    this.listeners.forEach(cb=> cb(this.authState));
   }
   listenToAuthChanges(callback){
-    listeners.push(callback);
-    callback(this.getAuthState());
+    this.listeners.push(callback);
+    callback(this.authState);
   }
-  getAuthState(){
-    return {token,user};
+  get authState(){
+    return {token: this.token,user: this.user, error: this.error};
   }
   signInWithPopup(){
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-      token = result.credential.accessToken;
-      user = result.user;
-    }).catch(function(error) {
-      console.log("Authentication error",error)
+    firebase.auth().signInWithPopup(provider).then(result => {
+      this.token = result.credential.accessToken;
+      this.user = result.user;
+    }).catch(error => {
+      console.log("Authentication error", error);
+      this.error = error;
+      this.notifyListeners();
     });
   }  
 }

@@ -1,3 +1,12 @@
+/*
+A service for getting data for a Github user.
+Used in the Combatant component.
+Uses GithubService to make the requests.
+
+This service acts as a gobetween between that and the Combatant,
+packaging up the data in the desired format.
+*/
+
 import { Injectable } from '@angular/core';
 
 import { GithubService } from './githubservice';
@@ -22,7 +31,7 @@ export class BattleService {
       return Observable.of(this.cache[id]);
     }
   }
-  digestRepoList(list){
+  private digestRepoList(list){
     return list.reduce((mem, repo) => {
       mem.forks += repo.forks_count;
       mem.stars += repo.stargazers_count;
