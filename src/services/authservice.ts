@@ -10,7 +10,6 @@ using any other part of Firebase.
 import { Injectable } from '@angular/core';
 
 import * as firebase from 'firebase/app';
-import {AuthCredential, UserCredential} from '@firebase/auth-types';
 import 'firebase/auth';
 
 firebase.initializeApp({

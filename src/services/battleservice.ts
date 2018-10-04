@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 
 import { GithubService } from './githubservice';
 
-import { Observable, of, forkJoin } from 'rxjs';
+import { of, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
