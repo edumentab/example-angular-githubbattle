@@ -43,10 +43,10 @@ export class AppComponent {
   error = null;
   loginName: string
   constructor(private authService: AuthService, private zone: NgZone){
-    authService.listenToAuthChanges((auth)=>{
+    authService.listenToAuthChanges(auth => {
       zone.run(() => { // hack to fix Zones not registering Websocket stuff reliably
         this.error = auth.error;
-        if (auth.token){
+        if (auth.token) {
           this.loginName = auth.user.displayName || auth.user.uid;
         }
       })

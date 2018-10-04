@@ -12,7 +12,6 @@ import { CombatantDetailComponent } from './combatantdetail';
 
 @NgModule({
     imports: [BrowserModule, HttpClientModule, FormsModule, CommonModule],
-    declarations: [ AppComponent, CombatantComponent, CombatantDetailComponent, BattleComponent ],
-    bootstrap: [ AppComponent ],
+    declarations: [ AppComponent, CombatantComponent, CombatantDetailComponent, BattleComponent ]
 })
 export class ComponentModule {}

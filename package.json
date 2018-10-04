@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@angular/cli": "^6.2.4",
+    "@types/node": "^10.11.4",
     "angular2-template-loader": "^0.6.2",
     "raw-loader": "^0.5.1",
     "ts-loader": "5.2.1",

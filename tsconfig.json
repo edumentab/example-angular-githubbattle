@@ -1,5 +1,5 @@
 {
-  "compileOnSave": false,
+  "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
@@ -15,7 +15,8 @@
       "es5",
       "es2017",
       "dom"
-    ]
+    ],
+    "types": ["node"]
   },
   "exclude": [
     "node_modules"
