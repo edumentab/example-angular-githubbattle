@@ -12,7 +12,7 @@ import { AuthService } from '../services/authservice';
 @Component({
   selector: 'app',
   template: `
-    <h2>Github battle</h2>
+    <h2>Github battle <span>an Angular example app by <a href="https://edument.se">Edument</a></span></h2>
     <div *ngIf="!loginName">
       You have to <button (click)="logIn()">log in</button>, otherwise Github's API limits won't let us have enough fun!
     </div>
@@ -24,7 +24,19 @@ import { AuthService } from '../services/authservice';
       <hr/>
       <battle></battle>
     </div>
-  `
+  `,
+  styles: [`
+    h2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    h2 > span {
+      font-size: 12px;
+      font-weight: normal;
+      color: #CBCBCB;
+    }
+  `]
 })
 export class AppComponent {
   plrs = ["FOO",null,null]
