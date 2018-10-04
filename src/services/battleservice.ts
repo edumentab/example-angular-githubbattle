@@ -11,14 +11,16 @@ import { Injectable } from '@angular/core';
 
 import { GithubService } from './githubservice';
 
-import { of, forkJoin } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { CombatantInfo, GithubRepo, CombatantRepoInfo } from '../types';
 
 @Injectable()
 export class BattleService {
   cache = {}
   constructor(private githubService: GithubService){}
-  battleInfoForUser(id){
+  battleInfoForUser(id): Observable<CombatantInfo>{
     if (!this.cache[id]){
       let user$ = this.githubService.getUser(id);
       let repo$ = this.githubService.getRepoListPages(id);
@@ -29,7 +31,7 @@ export class BattleService {
       return of(this.cache[id]);
     }
   }
-  private digestRepoList(list){
+  private digestRepoList(list: GithubRepo[]){
     return list.reduce((mem, repo) => {
       mem.forks += repo.forks_count;
       mem.stars += repo.stargazers_count;
@@ -41,7 +43,7 @@ export class BattleService {
       if (repo.stargazers_count > mem.mostStarred.stargazers_count){
         mem.mostStarred = repo;
       }
-      if (repo.watchers_count > mem.mostForked.watchers_count){
+      if (repo.watchers_count > mem.mostForked.forks_count){
         mem.mostWatched = repo;
       }
       return mem;
@@ -54,6 +56,6 @@ export class BattleService {
       mostWatched: {watchers_count:0},
       mostForked: {forks_count:0},
       languages: {}
-    });
+    } as CombatantRepoInfo);
   }
 }

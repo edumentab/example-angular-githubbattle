@@ -7,6 +7,8 @@ Rendered by the Combatant component.
 
 import { Component, Input } from '@angular/core';
 
+import { CombatantInfo } from '../types';
+
 @Component({
   selector: 'combatantdetail',
   template: `
@@ -32,7 +34,7 @@ import { Component, Input } from '@angular/core';
   `
 })
 export class CombatantDetailComponent {
-  @Input() data
+  @Input() data: CombatantInfo
   get languageKeys(){
     let count = this.data.repos.languages;
     return Object.keys(count).sort((l1,l2)=> count[l1] > count[l2] ? -1 : 1 );

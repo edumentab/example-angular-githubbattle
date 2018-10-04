@@ -11,19 +11,19 @@ import { Component, Output, EventEmitter } from '@angular/core';
 
 import { BattleService } from '../services/battleservice';
 
+import { CombatantInfo } from '../types';
+
 type CombatantMode = 'empty' | 'loading' | 'error' | 'data';
 
 @Component({
   selector: 'combatant',
   template: `
-    <div [class.winner]="winner">
-      <input placeholder="Github user name" [(ngModel)]="field" (keyup.enter)="loadData()">
-      <button (click)="loadData()" [disabled]="!canLoad">Load</button>
-      <div *ngIf="mode === 'loading'">...loading...</div>
-      <div *ngIf="mode === 'error'">Oh no, something wen't wrong :(</div>
-      <div *ngIf="mode === 'data'">
-        <combatantdetail [data]="data"></combatantdetail>
-      </div>
+    <input placeholder="Github user name" [(ngModel)]="field" (keyup.enter)="loadData()">
+    <button (click)="loadData()" [disabled]="!canLoad">Load</button>
+    <div *ngIf="mode === 'loading'">...loading...</div>
+    <div *ngIf="mode === 'error'">Oh no, something wen't wrong :(</div>
+    <div *ngIf="mode === 'data'">
+      <combatantdetail [data]="data"></combatantdetail>
     </div>
   `,
   styles: [`
@@ -37,7 +37,7 @@ type CombatantMode = 'empty' | 'loading' | 'error' | 'data';
 export class CombatantComponent {
   mode: CombatantMode = 'empty'
   field = ""
-  data = null
+  data: CombatantInfo = null
   @Output() stars = new EventEmitter<any>()
   constructor(private battleService: BattleService){}
   get canLoad() {
@@ -55,7 +55,6 @@ export class CombatantComponent {
           this.field = '';
         },
         error => {
-          console.log("WTF", error);
           this.mode = 'error';
           this.stars.emit(null);
         }

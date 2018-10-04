@@ -12,6 +12,8 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
+import { AuthInfo } from '../types';
+
 firebase.initializeApp({
   apiKey: "AIzaSyCDDwa9DrgySikEq7waBfXJK1wszeZVtDI",
   authDomain: "githubbattle-7edf6.firebaseapp.com",
@@ -32,11 +34,11 @@ export class AuthService {
   notifyListeners(){
     this.listeners.forEach(cb=> cb(this.authState));
   }
-  listenToAuthChanges(callback){
+  listenToAuthChanges(callback: (authInfo: AuthInfo) => any){
     this.listeners.push(callback);
     callback(this.authState);
   }
-  get authState(){
+  get authState(): AuthInfo {
     return {token: this.token,user: this.user, error: this.error};
   }
   signInWithPopup(){

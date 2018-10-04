@@ -8,29 +8,30 @@ since the list from Github is paginated, hence the extra stream juggling.
 */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { map, concat, flatMap, share, scan, filter, sample } from 'rxjs/operators';
 
 import { UrlService } from './urlservice';
+import { GithubRepo, GithubUserFullInfo } from '../types';
 
 @Injectable()
 export class GithubService {
   constructor(private http: HttpClient, private urls: UrlService){}
-  getUser(id):Observable<any>{
-    return this.http.get(this.urls.urlToUser(id))
+  getUser(id) {
+    return this.http.get<GithubUserFullInfo>(this.urls.urlToUser(id))
   }
-  private getRepoListSinglePage(id,page=1):Observable<any>{
-    return this.http.get(this.urls.urlToUserRepoListPage(id, page), { observe: 'response' }).pipe(
-      map( (res:HttpResponse<any>)=> ({
+  private getRepoListSinglePage(id,page=1) {
+    return this.http.get<GithubRepo[]>(this.urls.urlToUserRepoListPage(id, page), { observe: 'response' }).pipe(
+      map( (res) => ({
         repos: res.body,
         pageNumber: page,
         isLast: !(res.headers.get("link") || '').split(',')[0].match(/rel=["']next["']/)
       })
     ));
   }
-  private getRepoListPageStream(id,page=1): Observable<any> {
+  private getRepoListPageStream(id,page=1): Observable<PageResponse> {
     return this.getRepoListSinglePage(id, page).pipe(
       flatMap((page)=>{
         let ret = of(page);
@@ -51,4 +52,10 @@ export class GithubService {
     let last$ = page$.pipe(filter(val => val.isLast));
     return all$.pipe(sample(last$));
   }
+}
+
+interface PageResponse {
+  repos: GithubRepo[]
+  pageNumber: number
+  isLast: boolean
 }
