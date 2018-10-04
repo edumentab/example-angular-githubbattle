@@ -3,22 +3,22 @@ import 'reflect-metadata';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppComponent } from './components/app';
-import { BattleComponent } from './components/battle';
-import { CombatantComponent } from './components/combatant';
-import { CombatantDetailComponent } from './components/combatantdetail';
+import { AppComponent } from './src/components/app';
+import { BattleComponent } from './src/components/battle';
+import { CombatantComponent } from './src/components/combatant';
+import { CombatantDetailComponent } from './src/components/combatantdetail';
 
-import { UrlService } from './services/urlservice';
-import { GithubService } from './services/githubservice';
-import { BattleService } from './services/battleservice';
-import { AuthService } from './services/authservice';
+import { UrlService } from './src/services/urlservice';
+import { GithubService } from './src/services/githubservice';
+import { BattleService } from './src/services/battleservice';
+import { AuthService } from './src/services/authservice';
 
 @NgModule({
-    imports: [ BrowserModule, HttpModule, FormsModule ],
+    imports: [ BrowserModule, HttpClientModule, FormsModule ],
     declarations: [ AppComponent, CombatantComponent, CombatantDetailComponent, BattleComponent ],
     bootstrap: [ AppComponent ],
     providers: [ UrlService, GithubService, BattleService, AuthService ]

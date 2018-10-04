@@ -55,6 +55,7 @@ export class CombatantComponent {
           this.field = '';
         },
         error => {
+          console.log("WTF", error);
           this.mode = 'error';
           this.stars.emit(null);
         }

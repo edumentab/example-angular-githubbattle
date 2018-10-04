@@ -1,14 +1,23 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
+    "outDir": "./dist",
     "sourceMap": true,
-    "experimentalDecorators": true,
+    "declaration": false,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
       "es5",
-      "es2015",
+      "es2017",
       "dom"
     ]
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

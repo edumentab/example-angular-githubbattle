@@ -11,10 +11,8 @@ import { Injectable } from '@angular/core';
 
 import { GithubService } from './githubservice';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/of';
+import { Observable, of, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class BattleService {
@@ -24,11 +22,11 @@ export class BattleService {
     if (!this.cache[id]){
       let user$ = this.githubService.getUser(id);
       let repo$ = this.githubService.getRepoListPages(id);
-      return Observable.forkJoin(user$, repo$).map( ([user,list]) => {
+      return forkJoin(user$, repo$).pipe(map( ([user,list]) => {
         return ( this.cache[id] = ({id,user,repos:this.digestRepoList(list)}) );
-      })
+      }));
     } else {
-      return Observable.of(this.cache[id]);
+      return of(this.cache[id]);
     }
   }
   private digestRepoList(list){
