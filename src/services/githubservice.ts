@@ -27,7 +27,7 @@ export class GithubService {
       map( (res) => ({
         repos: res.body,
         pageNumber: page,
-        isLast: !(res.headers.get("link") || '').split(',')[0].match(/rel=["']next["']/)
+        isLast: !(res.headers.get("link") || '').match(/rel=["']last["']/)
       })
     ));
   }
