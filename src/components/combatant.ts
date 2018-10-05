@@ -2,7 +2,7 @@
 The Combatant component, responsible for rendering a single combatant.
 Rendered by the Battle component.
 
-The combatant component has a form where the user can load data for a Github user
+The combatant component has a form where the user can load data for a Github user.
 If a user is loaded it will display that data through a CombatantDetail component,
 and output the startcount to the parent.
 */
@@ -18,13 +18,11 @@ type CombatantMode = 'empty' | 'loading' | 'error' | 'data';
 @Component({
   selector: 'combatant',
   template: `
-    <input placeholder="Github user name" [(ngModel)]="field" (keyup.enter)="loadData()">
-    <button (click)="loadData()" [disabled]="!canLoad">Load</button>
-    <div *ngIf="mode === 'loading'">...loading...</div>
-    <div *ngIf="mode === 'error'">Oh no, something wen't wrong :(</div>
-    <div *ngIf="mode === 'data'">
-      <combatantdetail [data]="data"></combatantdetail>
-    </div>
+    <input class="qa-github-input" placeholder="Github user name" [(ngModel)]="field" (keyup.enter)="loadData()">
+    <button class="qa-load-button" (click)="loadData()" [disabled]="!canLoad">Load</button>
+    <div *ngIf="mode === 'loading'" class="qa-load-indicator">...loading...</div>
+    <div *ngIf="mode === 'error'" class="qa-error-indicator">Oh no, something wen't wrong :(</div>
+    <combatantdetail *ngIf="mode === 'data'" [data]="data"></combatantdetail>
   `,
   styles: [`
     :host {

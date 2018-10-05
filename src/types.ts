@@ -1,7 +1,7 @@
-import * as firebase from 'firebase/app';
-import { User } from '@firebase/auth-types';
 
 // ------- Types provided by our AuthService ------
+
+import { User } from '@firebase/auth-types';
 
 export interface AuthInfo {
   token?: string

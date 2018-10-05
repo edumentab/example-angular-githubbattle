@@ -12,15 +12,15 @@ import { CombatantInfo } from '../types';
 @Component({
   selector: 'combatantdetail',
   template: `
-    <p>
-      <a href="http://github.com/{{data.id}}" target="_blank">{{data.id}}</a> has {{data.repos.stars}} stars across
+    <p class="qa-basic-info">
+      <a href="http://github.com/{{data.id}}" class="qa-github-link" target="_blank">{{data.id}}</a> has {{data.repos.stars}} stars across
       {{data.repos.repos}} repos.
-      <span *ngIf="data.repos.mostStarred.name">
+      <span *ngIf="data.repos.mostStarred.name" class="qa-most-starred">
         The most popular repo is <a href="http://github.com/{{data.id}}/{{data.repos.mostStarred.name}}" target="_blank">
         {{data.repos.mostStarred.name}}</a> with {{data.repos.mostStarred.stargazers_count}} stars.
       </span>
     </p>
-    <div *ngIf="data.repos.repos">
+    <div class="qa-language" *ngIf="data.repos.repos">
       <p>Here's a language breakdown:</p>
       <table>
         <thead><tr><th>Language</th><th>Count</th></tr></thead>
