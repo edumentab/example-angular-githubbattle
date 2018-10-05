@@ -16,7 +16,7 @@
       "es2017",
       "dom"
     ],
-    "types": ["node"]
+    "types": ["node", "mocha", "chai", "sinon"]
   },
   "exclude": [
     "node_modules"
