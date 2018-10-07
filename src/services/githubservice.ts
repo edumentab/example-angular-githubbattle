@@ -23,12 +23,16 @@ export class GithubService {
     return this.http.get<GithubUserFullInfo>(this.urls.urlToUser(id))
   }
   private getRepoListSinglePage(id,page=1) {
-    return this.http.get<GithubRepo[]>(this.urls.urlToUserRepoListPage(id, page), { observe: 'response' }).pipe(
-      map( (res) => ({
-        repos: res.body,
-        pageNumber: page,
-        isLast: !(res.headers.get("link") || '').match(/rel=["']last["']/)
-      })
+    return this.http.get<GithubRepo[]>(this.urls.urlToRepoList(id, page), { observe: 'response' }).pipe(
+      map( (res) => {
+        const linkInfo = res.headers.get("link") || '';
+        console.log("OMG", res.body, page, linkInfo, !(linkInfo.match(/rel=["']last["']/)));
+        return ({
+          repos: res.body,
+          pageNumber: page,
+          isLast: !(linkInfo.match(/rel=["']last["']/))
+        });
+      }
     ));
   }
   private getRepoListPageStream(id,page=1): Observable<PageResponse> {
@@ -43,8 +47,8 @@ export class GithubService {
       share()
     );
   }
-  getRepoListPages(id){
-    let page$ = this.getRepoListPageStream(id);
+  getRepos(userId){
+    let page$ = this.getRepoListPageStream(userId);
     let all$ = page$.pipe(
       map(val=>val.repos),
       scan((acc, val)=> (acc||[]).concat(val))

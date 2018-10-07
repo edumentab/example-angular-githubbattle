@@ -15,7 +15,7 @@ const baseUrl = 'https://api.github.com/';
 @Injectable()
 export class UrlService {
   constructor(private authService: AuthService){}
-  urlToUserRepoListPage(id, page=1) {
+  urlToRepoList(id, page=1) {
     return baseUrl + 'users/' + id + '/repos?per_page=100&page=' + page + '&access_token=' + this.authService.authState.token;
   }
   urlToUser(id) {
