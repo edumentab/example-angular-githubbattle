@@ -190,6 +190,10 @@ describe('GithubService', () => {
             expect(resultListener.called).to.be.true;
             expect(resultListener.lastCall.args[0]).to.eql([...firstPage.body, ...secondPage.body, ...thirdPage.body]);
           });
+
+          it('should not make any further get requests', () => {
+            expect(fakeHttpService.get.callCount).to.equal(3, 'we didnt make a fourth request');
+          });
         });
       });
     });
