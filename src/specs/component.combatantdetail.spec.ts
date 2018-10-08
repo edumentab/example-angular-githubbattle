@@ -16,7 +16,7 @@ const testModuleConfig = {
   declarations: [CombatantDetailComponent],
 }
 
-// ------------ Moch input data -------------
+// ------------ Mock input data -------------
 
 type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]>; }; // https://stackoverflow.com/a/47914631
 import { CombatantInfo } from '../types';

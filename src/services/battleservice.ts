@@ -23,7 +23,7 @@ export class BattleService {
   battleInfoForUser(id): Observable<CombatantInfo>{
     if (!this.cache[id]){
       let user$ = this.githubService.getUser(id);
-      let repo$ = this.githubService.getRepoListPages(id);
+      let repo$ = this.githubService.getRepos(id);
       return forkJoin(user$, repo$).pipe(map( ([user,list]) => {
         return ( this.cache[id] = ({id,user,repos:this.digestRepoList(list)}) );
       }));
