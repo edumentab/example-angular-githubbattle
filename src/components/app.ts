@@ -14,12 +14,12 @@ import { AuthService } from '../services/authservice';
   template: `
     <h2>Github battle <span>an Angular example app by <a href="https://edument.se">Edument</a></span></h2>
     <div *ngIf="!loginName">
-      You have to <button (click)="logIn()">log in</button>, otherwise Github's API limits won't let us have enough fun!
+      You have to <button class="qa-login-button" (click)="logIn()">log in</button>, otherwise Github's API limits won't let us have enough fun!
     </div>
-    <div *ngIf="error">
+    <div *ngIf="error" class="qa-error-section">
       Something went wrong :(
     </div>
-    <div *ngIf="loginName">
+    <div *ngIf="loginName" class="qa-loggedin">
       Logged in as {{loginName}}.
       <hr/>
       <battle></battle>
@@ -39,7 +39,6 @@ import { AuthService } from '../services/authservice';
   `]
 })
 export class AppComponent {
-  plrs = ["FOO",null,null]
   error = null;
   loginName: string
   constructor(private authService: AuthService, private zone: NgZone){
