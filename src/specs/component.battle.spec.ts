@@ -72,6 +72,7 @@ describe('BattleComponent', () => {
     });
     it('should not be applied after we have just one count', () => {
       combatant1.stars.emit(456);
+      fixture.detectChanges();
       expect(nativeElement.querySelector('.winner')).to.not.exist;
     });
     it('should be applied to combatant1 when count exceeds combatant2', () => {
@@ -91,6 +92,7 @@ describe('BattleComponent', () => {
     it('should not be applied when counts are equal', () => {
       combatant1.stars.emit(7);
       combatant2.stars.emit(7);
+      fixture.detectChanges();
       expect(nativeElement.querySelector('.winner')).to.not.exist;
     });
     it('should be removed again if opponent becomes null', () => {
