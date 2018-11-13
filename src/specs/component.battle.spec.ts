@@ -9,7 +9,7 @@ Unit tests for the Battle component. We need to test...
 // --------------- Test config ---------------
 
 import { CommonModule } from '@angular/common';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockedComponent } from 'ng-mocks';
 
 import { BattleComponent } from '../components/battle';
 import { CombatantComponent } from '../components/combatant';
@@ -52,7 +52,7 @@ describe('BattleComponent', () => {
   });
 
   describe('the winner class', () => {
-    let combatant1: CombatantComponent, combatant2: CombatantComponent, combatantElement1: HTMLElement, combatantElement2: HTMLElement;
+    let combatant1: MockedComponent<CombatantComponent>, combatant2: MockedComponent<CombatantComponent>, combatantElement1: HTMLElement, combatantElement2: HTMLElement;
     beforeEach(() => {
       [combatant1, combatant2] = debugElement.queryAll(By.css('combatant')).map(el => el.componentInstance);
       [combatantElement1, combatantElement2] = Array.from(nativeElement.querySelectorAll('combatant'));
