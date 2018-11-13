@@ -8,18 +8,6 @@ Unit tests for the Combatant component. We need to test...
 
 /*******************************************/
 
-// --------------- Child component stubs -----------------
-
-import { Component, Input } from '@angular/core';
-
-@Component({
-  selector: 'combatantdetail',
-  template: ''
-})
-class FakeCombatantDetail {
-  @Input() data: CombatantInfo
-}
-
 // --------------- Service mocks ---------------
 
 import * as sinon from 'sinon';
@@ -36,13 +24,15 @@ const fakeBattleService = {
 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MockComponent } from 'ng-mocks';
 
 import { CombatantComponent } from '../components/combatant';
+import { CombatantDetailComponent } from '../components/combatantdetail';
 import { BattleService } from '../services/battleservice';
 
 const testModuleConfig = {
   imports: [FormsModule, CommonModule],
-  declarations: [CombatantComponent, FakeCombatantDetail],
+  declarations: [CombatantComponent, MockComponent(CombatantDetailComponent)],
   providers: [{provide: BattleService, useValue: fakeBattleService}]
 }
 
@@ -161,7 +151,7 @@ describe('CombatantComponent', () => {
 
       it('should send data to combatantdetail child', () => {
         expect(nativeElement.querySelector('combatantdetail')).to.exist;
-        const detailInstance: FakeCombatantDetail = debugElement.query(By.css('combatantdetail')).componentInstance;
+        const detailInstance: CombatantDetailComponent = debugElement.query(By.css('combatantdetail')).componentInstance;
         expect(detailInstance.data).to.equal(fakeReply);
       });
     });
