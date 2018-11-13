@@ -7,16 +7,6 @@ Unit tests for the App component. We need to test...
 
 /*******************************************/
 
-// --------------- Child component stubs -----------------
-
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'battle',
-  template: ''
-})
-class FakeBattle {}
-
 // --------------- Service mocks ---------------
 
 import * as sinon from 'sinon';
@@ -29,12 +19,14 @@ const fakeAuthService = {
 // --------------- Test config ---------------
 
 import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthService } from '../services/authservice';
 import { AppComponent } from '../components/app';
 
 const testModuleConfig = {
   imports: [CommonModule],
-  declarations: [AppComponent, FakeBattle],
+  declarations: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA], // to prevent complaints about unknown 'battle' element
   providers: [{provide: AuthService, useValue: fakeAuthService}]
 }
 
