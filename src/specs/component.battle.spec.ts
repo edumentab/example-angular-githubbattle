@@ -6,27 +6,17 @@ Unit tests for the Battle component. We need to test...
 
 /*******************************************/
 
-// --------------- Child component stubs -----------------
-
-import { Component, Output, EventEmitter } from '@angular/core';
-
-@Component({
-  selector: 'combatant',
-  template: ''
-})
-class FakeCombatant {
-  @Output() stars = new EventEmitter<number>()
-}
-
 // --------------- Test config ---------------
 
 import { CommonModule } from '@angular/common';
+import { MockComponent, MockedComponent } from 'ng-mocks';
 
 import { BattleComponent } from '../components/battle';
+import { CombatantComponent } from '../components/combatant';
 
 const testModuleConfig = {
   imports: [CommonModule],
-  declarations: [BattleComponent, FakeCombatant]
+  declarations: [BattleComponent, MockComponent(CombatantComponent)]
 }
 
 // --------------- Test suite ---------------
@@ -62,7 +52,7 @@ describe('BattleComponent', () => {
   });
 
   describe('the winner class', () => {
-    let combatant1: FakeCombatant, combatant2: FakeCombatant, combatantElement1: HTMLElement, combatantElement2: HTMLElement;
+    let combatant1: MockedComponent<CombatantComponent>, combatant2: MockedComponent<CombatantComponent>, combatantElement1: HTMLElement, combatantElement2: HTMLElement;
     beforeEach(() => {
       [combatant1, combatant2] = debugElement.queryAll(By.css('combatant')).map(el => el.componentInstance);
       [combatantElement1, combatantElement2] = Array.from(nativeElement.querySelectorAll('combatant'));
