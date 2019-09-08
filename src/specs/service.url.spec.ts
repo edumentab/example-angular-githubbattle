@@ -9,8 +9,6 @@ Unit tests for the Url service. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
-
 const fakeAuthService = {
   authState: {
     token: Math.random.toString()
@@ -32,13 +30,12 @@ const testModuleConfig = {
 // --------------- Test suite ---------------
 
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { expect } from 'chai';
 
 let service: UrlService;
 
 describe('UrlService', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   const baseUrl = 'https://api.github.com/';
 
@@ -47,7 +44,7 @@ describe('UrlService', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(service).to.exist;
+    expect(service).toBeTruthy();
   });
 
   describe('the urlToUser method', () => {
@@ -59,11 +56,11 @@ describe('UrlService', () => {
     });
 
     it('should give correct base URL', () => {
-      expect(result.split('?')[0]).to.equal(`${baseUrl}users/${fakeUserId}`);
+      expect(result.split('?')[0]).toBe(`${baseUrl}users/${fakeUserId}`);
     });
 
     it('should include access token as query param', () => {
-      expect(result.split('?')[1]).to.contain(`access_token=${fakeAuthService.authState.token}`);
+      expect(result.split('?')[1]).toContain(`access_token=${fakeAuthService.authState.token}`);
     });
   });
 
@@ -77,15 +74,15 @@ describe('UrlService', () => {
     });
 
     it('should give correct base URL', () => {
-      expect(result.split('?')[0]).to.equal(`${baseUrl}users/${fakeUserId}/repos`);
+      expect(result.split('?')[0]).toBe(`${baseUrl}users/${fakeUserId}/repos`);
     });
 
     it('should include access token as query param', () => {
-      expect(result.split('?')[1]).to.contain(`access_token=${fakeAuthService.authState.token}`);
+      expect(result.split('?')[1]).toContain(`access_token=${fakeAuthService.authState.token}`);
     });
 
     it('should include page as query param', () => {
-      expect(result.split('?')[1]).to.contain(`page=${fakePage}`);
+      expect(result.split('?')[1]).toContain(`page=${fakePage}`);
     });
   });
 });

@@ -9,11 +9,10 @@ Unit tests for the App component. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
 
 const fakeAuthService = {
-  signInWithPopup: sinon.stub(),
-  listenToAuthChanges: sinon.stub()
+  signInWithPopup: jest.fn(),
+  listenToAuthChanges: jest.fn()
 };
 
 // --------------- Test config ---------------
@@ -33,7 +32,6 @@ const testModuleConfig = {
 // --------------- Test suite ---------------
 
 import { TestBed, getTestBed, ComponentFixture } from '@angular/core/testing';
-import { expect } from 'chai';
 import { DebugElement } from '@angular/core';
 
 let fixture: ComponentFixture<AppComponent>
@@ -42,8 +40,11 @@ let debugElement: DebugElement
 let nativeElement: HTMLElement;
 
 describe('AppComponent', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => {
+    getTestBed().resetTestingModule();
+    jest.clearAllMocks();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
@@ -54,46 +55,46 @@ describe('AppComponent', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(instance).to.exist;
+    expect(instance).toBeTruthy();
   });
 
   describe('when not logged in', () => {
     it('should not render a battle component yet', () => {
-      expect(nativeElement.querySelector('battle')).to.not.exist;
+      expect(nativeElement.querySelector('battle')).not.toBeTruthy();
     });
   
     it('should render a login button', () => {
-      expect(nativeElement.querySelector('.qa-login-button')).to.exist;
+      expect(nativeElement.querySelector('.qa-login-button')).toBeTruthy();
     });
 
     it('should be listening to auth changes', () => {
-      expect(fakeAuthService.listenToAuthChanges.called).to.be.true;
-      expect(fakeAuthService.listenToAuthChanges.lastCall.args[0]).to.be.a('function');
+      expect(fakeAuthService.listenToAuthChanges).toBeCalled();
+      expect(fakeAuthService.listenToAuthChanges.mock.calls[0][0]).toBeInstanceOf(Function);
     });
 
     it('should not trigger popup immediately', () => {
-      expect(fakeAuthService.signInWithPopup.called).to.be.false;
+      expect(fakeAuthService.signInWithPopup).not.toBeCalled();
     });
 
     it('should trigger popup when button is clicked', () => {
       nativeElement.querySelector('.qa-login-button').dispatchEvent(new Event('click'));
-      expect(fakeAuthService.signInWithPopup.called).to.be.true;
+      expect(fakeAuthService.signInWithPopup).toBeCalled();
     });
   });
 
   describe('when login error', () => {
     beforeEach(() => {
-      const authCallback = fakeAuthService.listenToAuthChanges.lastCall.args[0];
+      const authCallback = fakeAuthService.listenToAuthChanges.mock.calls[0][0];
       authCallback({ user: {}, error: Symbol('some error') });
       fixture.detectChanges();
     });
 
     it('should render an error section', () => {
-      expect(nativeElement.querySelector('.qa-error-section')).to.exist;
+      expect(nativeElement.querySelector('.qa-error-section')).toBeTruthy();
     });
 
     it('should still render a login button', () => {
-      expect(nativeElement.querySelector('.qa-login-button')).to.exist;
+      expect(nativeElement.querySelector('.qa-login-button')).toBeTruthy();
     });
   });
 
@@ -106,21 +107,21 @@ describe('AppComponent', () => {
     };
 
     beforeEach(() => {
-      const authCallback = fakeAuthService.listenToAuthChanges.lastCall.args[0];
+      const authCallback = fakeAuthService.listenToAuthChanges.mock.calls[0][0];
       authCallback(fakeAuth);
       fixture.detectChanges();
     });
 
     it('should not render login button', () => {
-      expect(nativeElement.querySelector('.qa-login-button')).to.not.exist;
+      expect(nativeElement.querySelector('.qa-login-button')).not.toBeTruthy();
     });
 
     it('should render login section with user name', () => {
-      expect(nativeElement.querySelector('.qa-loggedin').innerHTML).to.contain(fakeAuth.user.displayName);
+      expect(nativeElement.querySelector('.qa-loggedin').innerHTML).toContain(fakeAuth.user.displayName);
     });
 
     it('should render a battle component', () => {
-      expect(nativeElement.querySelector('battle')).to.exist;
+      expect(nativeElement.querySelector('battle')).toBeTruthy();
     });
   });
 });

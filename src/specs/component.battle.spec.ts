@@ -23,7 +23,6 @@ const testModuleConfig = {
 
 import { TestBed, getTestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { expect } from 'chai';
 import { DebugElement } from '@angular/core';
 
 let fixture: ComponentFixture<BattleComponent>
@@ -32,8 +31,8 @@ let debugElement: DebugElement
 let nativeElement: HTMLElement;
 
 describe('BattleComponent', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BattleComponent);
@@ -44,11 +43,11 @@ describe('BattleComponent', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(instance).to.exist;
+    expect(instance).toBeTruthy();
   });
 
   it('should render two combatants', () => {
-    expect(nativeElement.querySelectorAll('combatant').length).to.equal(2);
+    expect(nativeElement.querySelectorAll('combatant').length).toBe(2);
   });
 
   describe('the winner class', () => {
@@ -58,47 +57,47 @@ describe('BattleComponent', () => {
       [combatantElement1, combatantElement2] = Array.from(nativeElement.querySelectorAll('combatant'));
     });
     it('should not be initially applied', () => {
-      expect(nativeElement.querySelector('.winner')).to.not.exist;
+      expect(nativeElement.querySelector('.winner')).not.toBeTruthy();
     });
     it('should not be applied after we have just one count', () => {
       combatant1.stars.emit(456);
       fixture.detectChanges();
-      expect(nativeElement.querySelector('.winner')).to.not.exist;
+      expect(nativeElement.querySelector('.winner')).not.toBeTruthy();
     });
     it('should be applied to combatant1 when count exceeds combatant2', () => {
       combatant1.stars.emit(5);
       combatant2.stars.emit(4);
       fixture.detectChanges();
-      expect(combatantElement1.classList.contains('winner')).to.be.true;
-      expect(combatantElement2.classList.contains('winner')).to.be.false;
+      expect(combatantElement1.classList.contains('winner')).toBe(true);
+      expect(combatantElement2.classList.contains('winner')).toBe(false);
     });
     it('should be applied to combatant2 when count exceeds combatant1', () => {
       combatant1.stars.emit(1);
       combatant2.stars.emit(8);
       fixture.detectChanges();
-      expect(combatantElement1.classList.contains('winner')).to.be.false;
-      expect(combatantElement2.classList.contains('winner')).to.be.true;
+      expect(combatantElement1.classList.contains('winner')).toBe(false);
+      expect(combatantElement2.classList.contains('winner')).toBe(true);
     });
     it('should not be applied when counts are equal', () => {
       combatant1.stars.emit(7);
       combatant2.stars.emit(7);
       fixture.detectChanges();
-      expect(nativeElement.querySelector('.winner')).to.not.exist;
+      expect(nativeElement.querySelector('.winner')).not.toBeTruthy();
     });
     it('should be removed again if opponent becomes null', () => {
       combatant1.stars.emit(5);
       combatant2.stars.emit(4);
       combatant2.stars.emit(null);
       fixture.detectChanges();
-      expect(nativeElement.querySelector('.winner')).to.not.exist;
+      expect(nativeElement.querySelector('.winner')).not.toBeTruthy();
     });
     it('should move if loser gets more', () => {
       combatant1.stars.emit(5);
       combatant2.stars.emit(4);
       combatant2.stars.emit(6);
       fixture.detectChanges();
-      expect(combatantElement1.classList.contains('winner')).to.be.false;
-      expect(combatantElement2.classList.contains('winner')).to.be.true;
+      expect(combatantElement1.classList.contains('winner')).toBe(false);
+      expect(combatantElement2.classList.contains('winner')).toBe(true);
     });
   });
 

@@ -10,14 +10,13 @@ Unit tests for the Combatant component. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
 
 const fakeBattleServiceObservable = {
-  subscribe: sinon.stub()
+  subscribe: jest.fn()
 };
 
 const fakeBattleService = {
-  battleInfoForUser: sinon.stub().returns(fakeBattleServiceObservable)
+  battleInfoForUser: jest.fn().mockReturnValue(fakeBattleServiceObservable)
 };
 
 // --------------- Test config ---------------
@@ -40,7 +39,6 @@ const testModuleConfig = {
 
 import { TestBed, getTestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { expect } from 'chai';
 import { DebugElement } from '@angular/core';
 import { CombatantInfo, CombatantRepoInfo } from '../types';
 
@@ -48,14 +46,14 @@ let fixture: ComponentFixture<CombatantComponent>
 let instance: CombatantComponent
 let debugElement: DebugElement
 let nativeElement: HTMLElement;
-let starsListener = sinon.stub();
+let starsListener = jest.fn();
 
 describe('CombatantComponent', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
-    sinon.resetHistory();
+    jest.clearAllMocks();
     fixture = TestBed.createComponent(CombatantComponent);
     debugElement = fixture.debugElement;
     instance = debugElement.componentInstance;
@@ -65,25 +63,25 @@ describe('CombatantComponent', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(instance).to.exist;
+    expect(instance).toBeTruthy();
   });
 
   it('should start with no indicators, no details and a disabled button', () => {
-    expect(nativeElement.querySelector('.qa-load-indicator')).to.not.exist;
-    expect(nativeElement.querySelector('.qa-error-indicator')).to.not.exist;
-    expect(nativeElement.querySelector('combatantdetail')).to.not.exist;
-    expect(nativeElement.querySelector('.qa-load-button[disabled]')).to.exist;
+    expect(nativeElement.querySelector('.qa-load-indicator')).not.toBeTruthy();
+    expect(nativeElement.querySelector('.qa-error-indicator')).not.toBeTruthy();
+    expect(nativeElement.querySelector('combatantdetail')).not.toBeTruthy();
+    expect(nativeElement.querySelector('.qa-load-button[disabled]')).toBeTruthy();
   });
 
   it('should not call service if we click button when field is empty', () => {
     nativeElement.querySelector(".qa-load-button").dispatchEvent(new Event('click'));
     fixture.detectChanges();
 
-    expect(fakeBattleService.battleInfoForUser.called).to.be.false;
+    expect(fakeBattleService.battleInfoForUser).not.toBeCalled();
   });
 
   it('should not emit anything to stars output', () => {
-    expect(starsListener.called).to.be.false;
+    expect(starsListener).not.toBeCalled();
   });
 
   describe('calling the service', () => {
@@ -99,27 +97,27 @@ describe('CombatantComponent', () => {
     });
 
     it('should call service with form content when button clicked', ()=> {
-      expect(fakeBattleService.battleInfoForUser.called).to.be.true;
-      expect(fakeBattleService.battleInfoForUser.firstCall.args[0]).to.equal(fieldContent);
+      expect(fakeBattleService.battleInfoForUser).toBeCalled();
+      expect(fakeBattleService.battleInfoForUser.mock.calls[0][0]).toBe(fieldContent);
     });
 
     it('should subscribe to success and fail for the provided observable', () => {
-      expect(fakeBattleServiceObservable.subscribe.called).to.be.true;
-      expect(fakeBattleServiceObservable.subscribe.firstCall.args[0]).to.be.a('function');
-      expect(fakeBattleServiceObservable.subscribe.firstCall.args[1]).to.be.a('function');
+      expect(fakeBattleServiceObservable.subscribe).toBeCalled();
+      expect(fakeBattleServiceObservable.subscribe.mock.calls[0][0]).toBeInstanceOf(Function);
+      expect(fakeBattleServiceObservable.subscribe.mock.calls[0][1]).toBeInstanceOf(Function);
     });
 
     it('should show a loading indicator', ()=> {
-      expect(nativeElement.querySelector('.qa-load-indicator')).to.exist;
+      expect(nativeElement.querySelector('.qa-load-indicator')).toBeTruthy();
     });
 
     it('should disable the button again', ()=> {
-      expect(nativeElement.querySelector('.qa-load-button[disabled]')).to.exist;
+      expect(nativeElement.querySelector('.qa-load-button[disabled]')).toBeTruthy();
     });
 
     it('should emit null to stars output', ()=> {
-      expect(starsListener.callCount).to.equal(1);
-      expect(starsListener.firstCall.args[0]).to.equal(null);
+      expect(starsListener).toBeCalledTimes(1);
+      expect(starsListener.mock.calls[0][0]).toBe(null);
     });
 
     describe('success', () => {
@@ -131,28 +129,28 @@ describe('CombatantComponent', () => {
       };
 
       beforeEach(() => {
-        const serviceSuccessCallback = fakeBattleServiceObservable.subscribe.firstCall.args[0];
+        const serviceSuccessCallback = fakeBattleServiceObservable.subscribe.mock.calls[0][0];
         serviceSuccessCallback(fakeReply);
         fixture.detectChanges();
       });
 
       it('should emit the received count to stars output', () => {
-        expect(starsListener.callCount).to.equal(2); // first was when loading, second is the success
-        expect(starsListener.lastCall.args[0]).to.equal(fakeReply.repos.stars);
+        expect(starsListener).toBeCalledTimes(2); // first was when loading, second is the success
+        expect(starsListener).toHaveBeenLastCalledWith(fakeReply.repos.stars);
       });
 
       it('should clear the contents of the field', () => {
-        expect(debugElement.query(By.css('.qa-github-input')).nativeElement.value).to.equal('');
+        expect(debugElement.query(By.css('.qa-github-input')).nativeElement.value).toBe('');
       });
 
       it('should stop showing a loading indicator', () => {
-        expect(nativeElement.querySelector('.qa-load-indicator')).to.not.exist;
+        expect(nativeElement.querySelector('.qa-load-indicator')).not.toBeTruthy();
       });
 
       it('should send data to combatantdetail child', () => {
-        expect(nativeElement.querySelector('combatantdetail')).to.exist;
+        expect(nativeElement.querySelector('combatantdetail')).toBeTruthy();
         const detailInstance: MockedComponent<CombatantDetailComponent> = debugElement.query(By.css('combatantdetail')).componentInstance;
-        expect(detailInstance.data).to.equal(fakeReply);
+        expect(detailInstance.data).toBe(fakeReply);
       });
     });
 
@@ -160,19 +158,19 @@ describe('CombatantComponent', () => {
       const fakeError = new Error('KABOOM');
 
       beforeEach(() => {
-        const serviceFailCallback = fakeBattleServiceObservable.subscribe.firstCall.args[1];
+        const serviceFailCallback = fakeBattleServiceObservable.subscribe.mock.calls[0][1];
         serviceFailCallback(fakeError);
         fixture.detectChanges();
       });
 
       it('should show an error indicator instead of the loading indicator', () => {
-        expect(nativeElement.querySelector('.qa-load-indicator')).to.not.exist;
-        expect(nativeElement.querySelector('.qa-error-indicator')).to.exist;
+        expect(nativeElement.querySelector('.qa-load-indicator')).not.toBeTruthy();
+        expect(nativeElement.querySelector('.qa-error-indicator')).toBeTruthy();
       });
 
       it('should emit null to stars output', ()=> {
-        expect(starsListener.callCount).to.equal(2); // first was when loading, second is the fail
-        expect(starsListener.lastCall.args[0]).to.equal(null);
+        expect(starsListener).toBeCalledTimes(2); // first was when loading, second is the fail
+        expect(starsListener).toHaveBeenLastCalledWith(null);
       });
     });
   });
