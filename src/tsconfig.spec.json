@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "module": "commonjs",
-    "types": ["jest", "node", "chai", "sinon"],
+    "types": ["jest", "node", "sinon"],
     "emitDecoratorMetadata": true
   },
   "files": ["polyfills.ts"],

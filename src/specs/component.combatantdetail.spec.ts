@@ -33,7 +33,6 @@ const basicData: RecursivePartial<CombatantInfo> = {
 
 import { TestBed, getTestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { expect } from 'chai';
 import { DebugElement } from '@angular/core';
 
 let fixture: ComponentFixture<CombatantDetailComponent>
@@ -56,26 +55,26 @@ describe('CombatantDetailComponent', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(instance).to.exist;
+    expect(instance).toBeTruthy();
   });
 
   it('should render a correct github link', () => {
     const link: HTMLAnchorElement = nativeElement.querySelector('.qa-github-link');
-    expect(link.getAttribute('href')).to.equal(`http://github.com/${basicData.id}`);
-    expect(link.innerHTML).to.equal(basicData.id);
+    expect(link.getAttribute('href')).toBe(`http://github.com/${basicData.id}`);
+    expect(link.innerHTML).toBe(basicData.id);
   });
 
   it('should include star count', () => {
     const info: HTMLElement = nativeElement.querySelector('.qa-basic-info');
-    expect(info.innerHTML).to.include(`has ${basicData.repos.stars} stars`);
+    expect(info.innerHTML).toContain(`has ${basicData.repos.stars} stars`);
   });
 
   it('should not render a section for most starred', () => {
-    expect(nativeElement.querySelector('.qa-most-starred')).to.not.exist;
+    expect(nativeElement.querySelector('.qa-most-starred')).not.toBeTruthy();
   });
 
   it('should not render a language section', () => {
-    expect(nativeElement.querySelector('.qa-language')).to.not.exist;
+    expect(nativeElement.querySelector('.qa-language')).not.toBeTruthy();
   });
 
   describe('when data for most starred', () => {
@@ -96,19 +95,19 @@ describe('CombatantDetailComponent', () => {
     });
 
     it('should render a section for most starred', () => {
-      expect(nativeElement.querySelector('.qa-most-starred')).to.exist;
+      expect(nativeElement.querySelector('.qa-most-starred')).toBeTruthy();
     });
 
     it('should include star count for that repo', () => {
       const info: HTMLElement = nativeElement.querySelector('.qa-most-starred');
-      expect(info.innerHTML).to.include(`with ${dataWithMostStarred.repos.mostStarred.stargazers_count} stars`);
+      expect(info.innerHTML).toContain(`with ${dataWithMostStarred.repos.mostStarred.stargazers_count} stars`);
     });
 
     it('should have a correct link to that repo', () => {
       const link: HTMLAnchorElement = nativeElement.querySelector('.qa-most-starred a');
       const expectedURL = `http://github.com/${dataWithMostStarred.id}/${dataWithMostStarred.repos.mostStarred.name}`;
-      expect(link.getAttribute('href')).to.equal(expectedURL);
-      expect(link.innerHTML).to.include(dataWithMostStarred.repos.mostStarred.name);
+      expect(link.getAttribute('href')).toBe(expectedURL);
+      expect(link.innerHTML).toContain(dataWithMostStarred.repos.mostStarred.name);
     });
   });
 
@@ -132,17 +131,17 @@ describe('CombatantDetailComponent', () => {
     });
 
     it('should render a language section', () => {
-      expect(nativeElement.querySelector('.qa-language')).to.exist;
+      expect(nativeElement.querySelector('.qa-language')).toBeTruthy();
     });
 
     it('should render a sorted table', () => {
       const tableBody = nativeElement.querySelector('.qa-language tbody');
-      expect(tableBody.querySelector('tr:first-child td:first-child').innerHTML).to.equal('first');
-      expect(tableBody.querySelector('tr:first-child td:last-child').innerHTML).to.equal(dataWithLangCount.repos.languages.first.toString());
-      expect(tableBody.querySelector('tr:nth-child(2) td:first-child').innerHTML).to.equal('middle');
-      expect(tableBody.querySelector('tr:nth-child(2) td:last-child').innerHTML).to.equal(dataWithLangCount.repos.languages.middle.toString());
-      expect(tableBody.querySelector('tr:last-child td:first-child').innerHTML).to.equal('last');
-      expect(tableBody.querySelector('tr:last-child td:last-child').innerHTML).to.equal(dataWithLangCount.repos.languages.last.toString());
+      expect(tableBody.querySelector('tr:first-child td:first-child').innerHTML).toBe('first');
+      expect(tableBody.querySelector('tr:first-child td:last-child').innerHTML).toBe(dataWithLangCount.repos.languages.first.toString());
+      expect(tableBody.querySelector('tr:nth-child(2) td:first-child').innerHTML).toBe('middle');
+      expect(tableBody.querySelector('tr:nth-child(2) td:last-child').innerHTML).toBe(dataWithLangCount.repos.languages.middle.toString());
+      expect(tableBody.querySelector('tr:last-child td:first-child').innerHTML).toBe('last');
+      expect(tableBody.querySelector('tr:last-child td:last-child').innerHTML).toBe(dataWithLangCount.repos.languages.last.toString());
     });
   });
 });

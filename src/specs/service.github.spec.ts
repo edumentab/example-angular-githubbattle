@@ -39,7 +39,6 @@ const testModuleConfig = {
 
 import { EventEmitter } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { expect } from 'chai';
 
 let service: GithubService;
 
@@ -54,7 +53,7 @@ describe('GithubService', () => {
   });
 
   it('should instantiate ok', () => {
-    expect(service).to.exist;
+    expect(service).toBeTruthy();
   });
 
   describe('the getUser method', () => {
@@ -66,20 +65,20 @@ describe('GithubService', () => {
     });
 
     it('should call url service with id to get url to user', () => {
-      expect(fakeUrlService.urlToUser.called).to.be.true;
-      expect(fakeUrlService.urlToUser.lastCall.args[0]).to.equal(fakeUserId);
+      expect(fakeUrlService.urlToUser.called).toBe(true);
+      expect(fakeUrlService.urlToUser.lastCall.args[0]).toBe(fakeUserId);
     });
 
     it('should pass the user url to .get method of the http service', () => {
-      expect(fakeHttpService.get.called).to.be.true;
-      expect(fakeHttpService.get.lastCall.args[0]).to.equal(fakeUrlService.urlToUser.lastCall.returnValue);
+      expect(fakeHttpService.get.called).toBe(true);
+      expect(fakeHttpService.get.lastCall.args[0]).toBe(fakeUrlService.urlToUser.lastCall.returnValue);
     });
 
     it('should return an observable which emits the .get reply', () => {
       const fakeData = Symbol('some data');
       fakeHttpService.get.lastCall.returnValue.emit(fakeData);
-      expect(resultListener.called).to.be.true;
-      expect(resultListener.lastCall.args[0]).to.equal(fakeData);
+      expect(resultListener.called).toBe(true);
+      expect(resultListener.lastCall.args[0]).toBe(fakeData);
     });
   });
 
@@ -92,18 +91,18 @@ describe('GithubService', () => {
     });
 
     it('should call url service with id to get url to first page of repo list', () => {
-      expect(fakeUrlService.urlToRepoList.called).to.be.true;
-      expect(fakeUrlService.urlToRepoList.lastCall.args[0]).to.equal(fakeUserId);
-      expect(fakeUrlService.urlToRepoList.lastCall.args[1]).to.equal(1);
+      expect(fakeUrlService.urlToRepoList.called).toBe(true);
+      expect(fakeUrlService.urlToRepoList.lastCall.args[0]).toBe(fakeUserId);
+      expect(fakeUrlService.urlToRepoList.lastCall.args[1]).toBe(1);
     });
 
     it('should pass the repo list url to .get method of the http service', () => {
-      expect(fakeHttpService.get.called).to.be.true;
-      expect(fakeHttpService.get.lastCall.args[0]).to.equal(fakeUrlService.urlToRepoList.lastCall.returnValue);
+      expect(fakeHttpService.get.called).toBe(true);
+      expect(fakeHttpService.get.lastCall.args[0]).toBe(fakeUrlService.urlToRepoList.lastCall.returnValue);
     });
 
     it('should not emit anything to returned stream before get stream emits', () => {
-      expect(resultListener.called).to.be.false;
+      expect(resultListener.called).toBe(false);
     });
 
     describe('single page result', () => {
@@ -117,15 +116,15 @@ describe('GithubService', () => {
         fakeHttpService.get.firstCall.returnValue.emit(singlePageReply);
       });
       it('should query the "link" header', () => {
-        expect(singlePageReply.headers.get.callCount).to.equal(1);
-        expect(singlePageReply.headers.get.firstCall.args[0]).to.equal("link");
+        expect(singlePageReply.headers.get.callCount).toBe(1);
+        expect(singlePageReply.headers.get.firstCall.args[0]).toBe("link");
       });
       it('should emit the body with the repos prop to the returned stream', () => {
-        expect(resultListener.called).to.be.true;
-        expect(resultListener.lastCall.args[0]).to.equal(singlePageReply.body);
+        expect(resultListener.called).toBe(true);
+        expect(resultListener.lastCall.args[0]).toBe(singlePageReply.body);
       });
       it('should only have made a single get request', () => {
-        expect(fakeHttpService.get.callCount).to.equal(1);
+        expect(fakeHttpService.get.callCount).toBe(1);
       });
     });
 
@@ -139,18 +138,18 @@ describe('GithubService', () => {
       });
 
       it('should not emit anything', () => {
-        expect(resultListener.called).to.be.false;
+        expect(resultListener.called).toBe(false);
       });
 
       it('should ask for the url to the second page', () => {
-        expect(fakeUrlService.urlToRepoList.callCount).to.equal(2);
-        expect(fakeUrlService.urlToRepoList.lastCall.args[0]).to.equal(fakeUserId);
-        expect(fakeUrlService.urlToRepoList.lastCall.args[1]).to.equal(2);
+        expect(fakeUrlService.urlToRepoList.callCount).toBe(2);
+        expect(fakeUrlService.urlToRepoList.lastCall.args[0]).toBe(fakeUserId);
+        expect(fakeUrlService.urlToRepoList.lastCall.args[1]).toBe(2);
       });
 
       it('should make a get request for the second page', () => {
-        expect(fakeHttpService.get.callCount).to.equal(2);
-        expect(fakeHttpService.get.lastCall.args[0]).to.equal(fakeUrlService.urlToRepoList.lastCall.returnValue);
+        expect(fakeHttpService.get.callCount).toBe(2);
+        expect(fakeHttpService.get.lastCall.args[0]).toBe(fakeUrlService.urlToRepoList.lastCall.returnValue);
       });
 
       describe('getting page 2/3', () => {
@@ -163,18 +162,18 @@ describe('GithubService', () => {
         });
 
         it('should not emit anything', () => {
-          expect(resultListener.called).to.be.false;
+          expect(resultListener.called).toBe(false);
         });
   
         it('should ask for the url to the third page', () => {
-          expect(fakeUrlService.urlToRepoList.callCount).to.equal(3);
-          expect(fakeUrlService.urlToRepoList.lastCall.args[0]).to.equal(fakeUserId);
-          expect(fakeUrlService.urlToRepoList.lastCall.args[1]).to.equal(3);
+          expect(fakeUrlService.urlToRepoList.callCount).toBe(3);
+          expect(fakeUrlService.urlToRepoList.lastCall.args[0]).toBe(fakeUserId);
+          expect(fakeUrlService.urlToRepoList.lastCall.args[1]).toBe(3);
         });
   
         it('should make a get request for the third page', () => {
-          expect(fakeHttpService.get.callCount).to.equal(3);
-          expect(fakeHttpService.get.lastCall.args[0]).to.equal(fakeUrlService.urlToRepoList.lastCall.returnValue);
+          expect(fakeHttpService.get.callCount).toBe(3);
+          expect(fakeHttpService.get.lastCall.args[0]).toBe(fakeUrlService.urlToRepoList.lastCall.returnValue);
         });
 
         describe('getting page 3/3', () => {
@@ -187,12 +186,12 @@ describe('GithubService', () => {
           });
 
           it('should emit list of all repos to return stream', () => {
-            expect(resultListener.called).to.be.true;
-            expect(resultListener.lastCall.args[0]).to.eql([...firstPage.body, ...secondPage.body, ...thirdPage.body]);
+            expect(resultListener.called).toBe(true);
+            expect(resultListener.lastCall.args[0]).toStrictEqual([...firstPage.body, ...secondPage.body, ...thirdPage.body]);
           });
 
           it('should not make any further get requests', () => {
-            expect(fakeHttpService.get.callCount).to.equal(3, 'we didnt make a fourth request');
+            expect(fakeHttpService.get.callCount).toBe(3) //we didnt make a fourth request;
           });
         });
       });
