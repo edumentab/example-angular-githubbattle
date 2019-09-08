@@ -37,8 +37,8 @@ import { expect } from 'chai';
 let service: UrlService;
 
 describe('UrlService', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   const baseUrl = 'https://api.github.com/';
 

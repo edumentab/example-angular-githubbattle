@@ -44,8 +44,8 @@ import { expect } from 'chai';
 let service: GithubService;
 
 describe('GithubService', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
     sinon.resetHistory();

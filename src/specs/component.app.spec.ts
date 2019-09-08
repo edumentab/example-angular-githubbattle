@@ -42,8 +42,8 @@ let debugElement: DebugElement
 let nativeElement: HTMLElement;
 
 describe('AppComponent', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);

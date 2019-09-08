@@ -51,8 +51,8 @@ let nativeElement: HTMLElement;
 let starsListener = sinon.stub();
 
 describe('CombatantComponent', () => {
-  before(() => TestBed.configureTestingModule(testModuleConfig));
-  after(() => getTestBed().resetTestingModule());
+  beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
+  afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
     sinon.resetHistory();
