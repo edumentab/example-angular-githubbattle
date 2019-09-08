@@ -10,14 +10,13 @@ Unit tests for the Combatant component. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
 
 const fakeBattleServiceObservable = {
-  subscribe: sinon.stub()
+  subscribe: jest.fn()
 };
 
 const fakeBattleService = {
-  battleInfoForUser: sinon.stub().returns(fakeBattleServiceObservable)
+  battleInfoForUser: jest.fn().mockReturnValue(fakeBattleServiceObservable)
 };
 
 // --------------- Test config ---------------
@@ -47,14 +46,14 @@ let fixture: ComponentFixture<CombatantComponent>
 let instance: CombatantComponent
 let debugElement: DebugElement
 let nativeElement: HTMLElement;
-let starsListener = sinon.stub();
+let starsListener = jest.fn();
 
 describe('CombatantComponent', () => {
   beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
   afterEach(() => getTestBed().resetTestingModule());
 
   beforeEach(() => {
-    sinon.resetHistory();
+    jest.clearAllMocks();
     fixture = TestBed.createComponent(CombatantComponent);
     debugElement = fixture.debugElement;
     instance = debugElement.componentInstance;
@@ -78,11 +77,11 @@ describe('CombatantComponent', () => {
     nativeElement.querySelector(".qa-load-button").dispatchEvent(new Event('click'));
     fixture.detectChanges();
 
-    expect(fakeBattleService.battleInfoForUser.called).toBe(false);
+    expect(fakeBattleService.battleInfoForUser).not.toBeCalled();
   });
 
   it('should not emit anything to stars output', () => {
-    expect(starsListener.called).toBe(false);
+    expect(starsListener).not.toBeCalled();
   });
 
   describe('calling the service', () => {
@@ -98,14 +97,14 @@ describe('CombatantComponent', () => {
     });
 
     it('should call service with form content when button clicked', ()=> {
-      expect(fakeBattleService.battleInfoForUser.called).toBe(true);
-      expect(fakeBattleService.battleInfoForUser.firstCall.args[0]).toBe(fieldContent);
+      expect(fakeBattleService.battleInfoForUser).toBeCalled();
+      expect(fakeBattleService.battleInfoForUser.mock.calls[0][0]).toBe(fieldContent);
     });
 
     it('should subscribe to success and fail for the provided observable', () => {
-      expect(fakeBattleServiceObservable.subscribe.called).toBe(true);
-      expect(fakeBattleServiceObservable.subscribe.firstCall.args[0]).toBeInstanceOf(Function);
-      expect(fakeBattleServiceObservable.subscribe.firstCall.args[1]).toBeInstanceOf(Function);
+      expect(fakeBattleServiceObservable.subscribe).toBeCalled();
+      expect(fakeBattleServiceObservable.subscribe.mock.calls[0][0]).toBeInstanceOf(Function);
+      expect(fakeBattleServiceObservable.subscribe.mock.calls[0][1]).toBeInstanceOf(Function);
     });
 
     it('should show a loading indicator', ()=> {
@@ -117,8 +116,8 @@ describe('CombatantComponent', () => {
     });
 
     it('should emit null to stars output', ()=> {
-      expect(starsListener.callCount).toBe(1);
-      expect(starsListener.firstCall.args[0]).toBe(null);
+      expect(starsListener).toBeCalledTimes(1);
+      expect(starsListener.mock.calls[0][0]).toBe(null);
     });
 
     describe('success', () => {
@@ -130,14 +129,14 @@ describe('CombatantComponent', () => {
       };
 
       beforeEach(() => {
-        const serviceSuccessCallback = fakeBattleServiceObservable.subscribe.firstCall.args[0];
+        const serviceSuccessCallback = fakeBattleServiceObservable.subscribe.mock.calls[0][0];
         serviceSuccessCallback(fakeReply);
         fixture.detectChanges();
       });
 
       it('should emit the received count to stars output', () => {
-        expect(starsListener.callCount).toBe(2); // first was when loading, second is the success
-        expect(starsListener.lastCall.args[0]).toBe(fakeReply.repos.stars);
+        expect(starsListener).toBeCalledTimes(2); // first was when loading, second is the success
+        expect(starsListener).toHaveBeenLastCalledWith(fakeReply.repos.stars);
       });
 
       it('should clear the contents of the field', () => {
@@ -159,7 +158,7 @@ describe('CombatantComponent', () => {
       const fakeError = new Error('KABOOM');
 
       beforeEach(() => {
-        const serviceFailCallback = fakeBattleServiceObservable.subscribe.firstCall.args[1];
+        const serviceFailCallback = fakeBattleServiceObservable.subscribe.mock.calls[0][1];
         serviceFailCallback(fakeError);
         fixture.detectChanges();
       });
@@ -170,8 +169,8 @@ describe('CombatantComponent', () => {
       });
 
       it('should emit null to stars output', ()=> {
-        expect(starsListener.callCount).toBe(2); // first was when loading, second is the fail
-        expect(starsListener.lastCall.args[0]).toBe(null);
+        expect(starsListener).toBeCalledTimes(2); // first was when loading, second is the fail
+        expect(starsListener).toHaveBeenLastCalledWith(null);
       });
     });
   });

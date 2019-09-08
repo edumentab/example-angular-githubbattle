@@ -9,11 +9,10 @@ Unit tests for the App component. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
 
 const fakeAuthService = {
-  signInWithPopup: sinon.stub(),
-  listenToAuthChanges: sinon.stub()
+  signInWithPopup: jest.fn(),
+  listenToAuthChanges: jest.fn()
 };
 
 // --------------- Test config ---------------
@@ -42,7 +41,10 @@ let nativeElement: HTMLElement;
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule(testModuleConfig));
-  afterEach(() => getTestBed().resetTestingModule());
+  afterEach(() => {
+    getTestBed().resetTestingModule();
+    jest.clearAllMocks();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
@@ -66,23 +68,23 @@ describe('AppComponent', () => {
     });
 
     it('should be listening to auth changes', () => {
-      expect(fakeAuthService.listenToAuthChanges.called).toBe(true);
-      expect(fakeAuthService.listenToAuthChanges.lastCall.args[0]).toBeInstanceOf(Function);
+      expect(fakeAuthService.listenToAuthChanges).toBeCalled();
+      expect(fakeAuthService.listenToAuthChanges.mock.calls[0][0]).toBeInstanceOf(Function);
     });
 
     it('should not trigger popup immediately', () => {
-      expect(fakeAuthService.signInWithPopup.called).toBe(false);
+      expect(fakeAuthService.signInWithPopup).not.toBeCalled();
     });
 
     it('should trigger popup when button is clicked', () => {
       nativeElement.querySelector('.qa-login-button').dispatchEvent(new Event('click'));
-      expect(fakeAuthService.signInWithPopup.called).toBe(true);
+      expect(fakeAuthService.signInWithPopup).toBeCalled();
     });
   });
 
   describe('when login error', () => {
     beforeEach(() => {
-      const authCallback = fakeAuthService.listenToAuthChanges.lastCall.args[0];
+      const authCallback = fakeAuthService.listenToAuthChanges.mock.calls[0][0];
       authCallback({ user: {}, error: Symbol('some error') });
       fixture.detectChanges();
     });
@@ -105,7 +107,7 @@ describe('AppComponent', () => {
     };
 
     beforeEach(() => {
-      const authCallback = fakeAuthService.listenToAuthChanges.lastCall.args[0];
+      const authCallback = fakeAuthService.listenToAuthChanges.mock.calls[0][0];
       authCallback(fakeAuth);
       fixture.detectChanges();
     });

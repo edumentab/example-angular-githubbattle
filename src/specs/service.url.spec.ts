@@ -9,8 +9,6 @@ Unit tests for the Url service. We need to test...
 
 // --------------- Service mocks ---------------
 
-import * as sinon from 'sinon';
-
 const fakeAuthService = {
   authState: {
     token: Math.random.toString()
