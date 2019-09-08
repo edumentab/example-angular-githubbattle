@@ -16,9 +16,9 @@
       "es2017",
       "dom"
     ],
-    "types": ["node", "mocha", "chai", "sinon"]
+    "types": ["node"]
   },
   "exclude": [
-    "node_modules"
+    "node_modules", "**/*.spec.ts"
   ]
 }
